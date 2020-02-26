@@ -21,11 +21,11 @@ resource "azurerm_kubernetes_cluster" "main" {
     }
   }
 
-  agent_pool_profile {
+  default_node_pool {
     name            = "nodepool"
-    count           = var.agents_count
+    node_count           = var.agents_count
     vm_size         = var.agents_size
-    os_type         = "Linux"
+#    os_type         = "Linux"
     os_disk_size_gb = 50
   }
 
