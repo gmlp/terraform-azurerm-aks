@@ -34,36 +34,5 @@ resource "azurerm_kubernetes_cluster" "main" {
     client_secret = var.client_secret
   }
 
-  addon_profile {
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
-    }
-  }
-
   tags = var.tags
 }
-
-
-resource "azurerm_log_analytics_workspace" "main" {
-  name                = "${var.prefix}-workspace"
-  location            = data.azurerm_resource_group.main.location
-  resource_group_name = var.resource_group_name
-  sku                 = var.log_analytics_workspace_sku
-  retention_in_days   = var.log_retention_in_days
-}
-
-resource "azurerm_log_analytics_solution" "main" {
-  solution_name         = "ContainerInsights"
-  location              = data.azurerm_resource_group.main.location
-  resource_group_name   = var.resource_group_name
-  workspace_resource_id = azurerm_log_analytics_workspace.main.id
-  workspace_name        = azurerm_log_analytics_workspace.main.name
-
-  plan {
-    publisher = "Microsoft"
-    product   = "OMSGallery/ContainerInsights"
-  }
-}
-
-
